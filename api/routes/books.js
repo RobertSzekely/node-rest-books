@@ -8,8 +8,13 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
+    const book = {
+        title: req.body.title,
+        author: req.body.author
+    }
     res.status(200).json({
-        message: 'Handling POST requests to /books'
+        message: 'Handling POST requests to /books',
+        createdBook: book
     });
 });
 

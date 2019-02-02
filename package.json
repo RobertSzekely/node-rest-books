@@ -15,6 +15,7 @@
   "author": "Szekely Robert",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "morgan": "^1.9.1",
     "npm": "^6.7.0"
