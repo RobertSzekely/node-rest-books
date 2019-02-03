@@ -8,7 +8,10 @@ const bookRoutes = require('./api/routes/books');
 const userRoutes = require('./api/routes/user');
 
 mongoose.connect("mongodb+srv://robertszekely:" + process.env.MONGO_ATLAS_PW + '@node-rest-books-omjs7.mongodb.net/test?retryWrites=true',
-    { useNewUrlParser: true }
+    {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+    }
 );
 
 app.use(morgan('dev'));
