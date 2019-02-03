@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const checkAuth = require("../middleware/check-auth");
 
 const Book = require('../models/book');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     Book.find()
         .select('title author _id')
         .exec()
         .then(books => {
-            const response = {
+            res.status(200).json({
                 count: books.length,
                 books: books
-            };
-            res.status(200).json(response)
+            });
         })
         .catch(err => {
             console.log(err);
@@ -23,7 +23,7 @@ router.get('/', (req, res, next) => {
         });
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     const book = new Book({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
@@ -49,7 +49,7 @@ router.post('/', (req, res, next) => {
         });
 });
 
-router.get("/:bookId", (req, res, next) => {
+router.get("/:bookId", checkAuth, (req, res, next) => {
     const id = req.params.bookId;
     Book.findById(id)
         .select('title author _id')
@@ -68,7 +68,7 @@ router.get("/:bookId", (req, res, next) => {
         });
 });
 
-router.patch('/:bookId', (req, res, next) => {
+router.patch('/:bookId', checkAuth, (req, res, next) => {
     const id = req.params.bookId
     const updateData = req.body;
     Book.updateOne({ _id: id }, updateData)
@@ -86,7 +86,7 @@ router.patch('/:bookId', (req, res, next) => {
         });
 });
 
-router.delete('/:bookId', (req, res, next) => {
+router.delete('/:bookId', checkAuth, (req, res, next) => {
     const id = req.params.bookId
     Book.deleteOne({ _id: id })
         .exec()
