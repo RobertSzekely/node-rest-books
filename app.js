@@ -2,8 +2,13 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const bookRoutes = require('./api/routes/books');
+
+mongoose.connect("mongodb+srv://robertszekely:" + process.env.MONGO_ATLAS_PW + '@node-rest-books-omjs7.mongodb.net/test?retryWrites=true',
+    { useNewUrlParser: true }
+);
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
