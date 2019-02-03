@@ -6,16 +6,14 @@ const Book = require('../models/book');
 
 router.get('/', (req, res, next) => {
     Book.find()
+        .select('title author _id')
         .exec()
         .then(books => {
-            console.log(books);
-            if (books.length >= 0) {
-                res.status(200).json(books);
-            } else {
-                res.status(404).json({
-                    message: 'No entries found'
-                })
-            }
+            const response = {
+                count: books.length,
+                books: books
+            };
+            res.status(200).json(response)
         })
         .catch(err => {
             console.log(err);
@@ -37,7 +35,10 @@ router.post('/', (req, res, next) => {
             console.log(result)
             res.status(200).json({
                 message: 'Book was added successfully',
-                createdBook: book
+                createdBook: {
+                    title: result.title,
+                    author: result.author
+                }
             });
         })
         .catch(err => {
@@ -51,6 +52,7 @@ router.post('/', (req, res, next) => {
 router.get("/:bookId", (req, res, next) => {
     const id = req.params.bookId;
     Book.findById(id)
+        .select('title author _id')
         .exec()
         .then(book => {
             console.log(book);
@@ -69,26 +71,29 @@ router.get("/:bookId", (req, res, next) => {
 router.patch('/:bookId', (req, res, next) => {
     const id = req.params.bookId
     const updateData = req.body;
-    Book.update({ _id: id }, updateData)
-    .exec()
-    .then(result => {
-        console.log(result);
-        res.status(201).json(result);
-    })
-    .catch(err => {
-        console.log(err);
-        res.status(500).json({
-            error: err
+    Book.updateOne({ _id: id }, updateData)
+        .exec()
+        .then(result => {
+            res.status(201).json({
+                message: 'Book updated'
+            });
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
         });
-    });
 });
 
 router.delete('/:bookId', (req, res, next) => {
     const id = req.params.bookId
-    Book.remove({ _id: id })
+    Book.deleteOne({ _id: id })
         .exec()
         .then(result => {
-            res.status(200).json(result);
+            res.status(200).json({
+                message: 'Book deleted'
+            });
         })
         .catch(err => {
             console.log(err);
