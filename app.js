@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const bookRoutes = require('./api/routes/books');
+const userRoutes = require('./api/routes/user');
 
 mongoose.connect("mongodb+srv://robertszekely:" + process.env.MONGO_ATLAS_PW + '@node-rest-books-omjs7.mongodb.net/test?retryWrites=true',
     { useNewUrlParser: true }
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 
 //Routes which handle requests
 app.use('/books', bookRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
