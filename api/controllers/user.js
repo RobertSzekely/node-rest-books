@@ -9,7 +9,7 @@ exports.user_signup = (req, res, next) => {
         .exec()
         .then(user => {
             if (user.length >= 1) {
-                return res.status(409).json({
+                return res.status(401).json({
                     message: 'Email already exists'
                 });
             } else {
@@ -66,7 +66,7 @@ exports.user_login = (req, res, next) => {
                         },
                         process.env.MONGO_ATLAS_PW,
                         {
-                            expiresIn: "4h"
+                            expiresIn: "1d"
                         }
                     );
                     return res.status(200).json({
