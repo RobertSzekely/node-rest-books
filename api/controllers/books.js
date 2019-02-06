@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 exports.books_get_all = (req, res, next) => {
     Book.find()
-        .select('title author _id')
+        .select('title author _id cover')
         .exec()
         .then(books => {
             res.status(200).json({
@@ -23,7 +23,8 @@ exports.books_create_book = (req, res, next) => {
     const book = new Book({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
-        author: req.body.author
+        author: req.body.author,
+        cover: req.body.cover
     });
     book
         .save()
@@ -34,7 +35,8 @@ exports.books_create_book = (req, res, next) => {
                 createdBook: {
                     id: result._id,
                     title: result.title,
-                    author: result.author
+                    author: result.author,
+                    cover: result.cover
                 }
             });
         })
